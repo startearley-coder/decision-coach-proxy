@@ -23,15 +23,16 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema, generating thoughtful content for every field:
+            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema to satisfy both the frontend UI and the backend database:
 {
-  "report_text": "A brief 2-paragraph overview of their situation.",
-  "goal_interpretation": "A concise interpretation of their desired outcome.",
-  "key_constraints": "A summary of their constraints (urgency, financial impact, reversibility).",
-  "regret_risk": "An explanation of the biggest risk or emotional toll if they make the wrong choice.",
-  "recommendation_direction": "State the exact name of the single best option they should choose.",
-  "confidence_percent": 85,
-  "preparation_step": "A practical next action they should take to prepare for this decision.",
+  "goalInterpretation": "A concise interpretation of their desired outcome.",
+  "keyConstraints": "A summary paragraph of their constraints (urgency, financial impact, reversibility).",
+  "regretRisk": "An explanation of the biggest risk or emotional toll if they make the wrong choice.",
+  "balancedRecommendation": {
+    "suggestedDirection": "State the exact name of the single best option.",
+    "confidence": 85,
+    "preparationStep": "A practical next action they should take."
+  },
   "optionComparison": [
     {
       "option": "Name of the option",
@@ -39,7 +40,10 @@ export default async function handler(req, res) {
       "likelyPercent": 40,
       "worstPercent": 20
     }
-  ]
+  ],
+  "report_text": "A brief written analysis of the decision.",
+  "recommendation_direction": "State the exact name of the single best option (duplicate of suggestedDirection).",
+  "confidence_percent": 85
 }
 Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
           },
