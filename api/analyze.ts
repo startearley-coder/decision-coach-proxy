@@ -6,9 +6,10 @@ export default async function handler(req: Request) {
     );
   }
 
-  let body; // Declare outside the try block
+  let body;
   try {
     body = await req.json();
+    console.log("Parsed body:", body); // Log the parsed body
     if (!body || Object.keys(body).length === 0) {
       return new Response(
         JSON.stringify({ error: "No valid data received" }),
