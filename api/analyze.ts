@@ -1,3 +1,4 @@
+// @ts-nocheck
 export default async function handler(req, res) {
   // 1. Only allow POST requests
   if (req.method !== "POST") {
@@ -19,12 +20,11 @@ export default async function handler(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // This pulls your secret key from Vercel's Environment Variables
         "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` 
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        response_format: { type: "json_object" }, // Forces OpenAI to return clean JSON
+        response_format: { type: "json_object" }, 
         messages: [
           {
             role: "system",
