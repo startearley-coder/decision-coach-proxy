@@ -23,16 +23,19 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema to satisfy both the frontend UI and the backend database:
+            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema structure. Do not deviate.
+
 {
-  "goalInterpretation": "A concise interpretation of their desired outcome.",
-  "keyConstraints": "A summary paragraph of their constraints (urgency, financial impact, reversibility).",
-  "regretRisk": "An explanation of the biggest risk or emotional toll if they make the wrong choice.",
-  "balancedRecommendation": {
-    "suggestedDirection": "State the exact name of the single best option.",
-    "confidence": 85,
-    "preparationStep": "A practical next action they should take."
+  "recommendation": {
+    "suggestion": "State the exact name of the single best option they should choose.",
+    "considerations": [
+      "A single, practical, immediate next step or preparation action they should take."
+    ]
   },
+  "confidence_percent": 85,
+  "goal_interpretation": "A concise paragraph interpreting their desired outcome and underlying needs.",
+  "key_constraints": "A summary paragraph of their main constraints (urgency, financial, reversibility, uncertainty).",
+  "regret_risk": "A paragraph explaining the biggest emotional or practical risk if they make the wrong choice.",
   "optionComparison": [
     {
       "option": "Name of the option",
@@ -41,10 +44,10 @@ export default async function handler(req, res) {
       "worstPercent": 20
     }
   ],
-  "report_text": "A brief written analysis of the decision.",
-  "recommendation_direction": "State the exact name of the single best option (duplicate of suggestedDirection).",
-  "confidence_percent": 85
+  "recommendation_direction": "Duplicate of the 'suggestion' value above.",
+  "report_text": "A combined summary paragraph of the goal, constraints, and risk analysis."
 }
+
 Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
           },
           {
