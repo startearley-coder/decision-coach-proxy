@@ -1,59 +1,60 @@
-export default async function handler(req: Request) {
+export default async function handler(req, res) {
+  // 1. Only allow POST requests
   if (req.method !== "POST") {
-    return new Response(
-      JSON.stringify({ error: "Method not allowed" }),
-      { status: 405, headers: { "content-type": "application/json" } }
-    );
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  let body;
   try {
-    body = await Promise.race([
-      req.json(),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Request timed out")), 10000) // 10 seconds
-      )
-    ]);
-    console.log("Parsed body:", body); // Log the parsed body
+    // 2. Vercel automatically parses the JSON body in Node environments
+    const body = req.body;
 
     if (!body || Object.keys(body).length === 0) {
-      return new Response(
-        JSON.stringify({ error: "No valid data received" }),
-        { status: 400, headers: { "content-type": "application/json" } }
-      );
+      return res.status(400).json({ error: "No valid data received from Mocha" });
     }
 
-    // Make the external request with a timeout
-    const externalPromise = fetch('YOUR_API_URL', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
+    console.log("Received payload from Mocha:", JSON.stringify(body));
+
+    // 3. Forward the data to OpenAI
+    const openAiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // This pulls your secret key from Vercel's Environment Variables
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` 
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        response_format: { type: "json_object" }, // Forces OpenAI to return clean JSON
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert decision coach. Analyze the user's decision inputs and return a strict JSON object with your analysis. Ensure the output is formatted cleanly."
+          },
+          {
+            role: "user",
+            content: JSON.stringify(body)
+          }
+        ]
+      })
     });
 
-    // Use the timeout around the external call
-    const response = await Promise.race([
-      externalPromise,
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("External request timed out")), 10000) // Another 10 seconds
-      )
-    ]);
-
-    if (!response.ok) {
-      throw new Error(`External API error: ${response.status}`);
+    if (!openAiResponse.ok) {
+      const errorText = await openAiResponse.text();
+      console.error("OpenAI API Error:", errorText);
+      return res.status(openAiResponse.status).json({ error: "OpenAI API failed", details: errorText });
     }
 
-    const result = await response.json();
+    // 4. Extract the AI's response and send it back to Mocha
+    const data = await openAiResponse.json();
+    const aiMessage = data.choices[0].message.content;
 
-    // Return the result back to the client
-    return new Response(
-      JSON.stringify({ ok: true, received: result }),
-      { status: 200, headers: { "content-type": "application/json" } }
-    );
+    console.log("Successfully generated AI analysis.");
+    
+    // Mocha is expecting a JSON object, so we parse the AI's stringified JSON
+    return res.status(200).json({ analysis: JSON.parse(aiMessage) });
 
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { "content-type": "application/json" } }
-    );
+    console.error("Vercel Server Error:", error.message);
+    return res.status(500).json({ error: "Internal Server Error", details: error.message });
   }
 }
