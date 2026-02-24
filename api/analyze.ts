@@ -23,11 +23,15 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema, and nothing else:
+            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema, generating thoughtful content for every field:
 {
-  "report_text": "A detailed, written 2-3 paragraph analysis of their decision.",
-  "recommendation_direction": "State the single best option they should choose.",
+  "report_text": "A brief 2-paragraph overview of their situation.",
+  "goal_interpretation": "A concise interpretation of their desired outcome.",
+  "key_constraints": "A summary of their constraints (urgency, financial impact, reversibility).",
+  "regret_risk": "An explanation of the biggest risk or emotional toll if they make the wrong choice.",
+  "recommendation_direction": "State the exact name of the single best option they should choose.",
   "confidence_percent": 85,
+  "preparation_step": "A practical next action they should take to prepare for this decision.",
   "optionComparison": [
     {
       "option": "Name of the option",
@@ -55,7 +59,6 @@ Ensure there is an object in the optionComparison array for every option the use
     const data = await openAiResponse.json();
     const aiMessage = data.choices[0].message.content;
     
-    // Send the correctly shaped JSON back to Mocha
     return res.status(200).json({ analysis: JSON.parse(aiMessage) });
 
   } catch (error) {
