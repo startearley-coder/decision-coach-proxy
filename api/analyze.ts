@@ -8,8 +8,15 @@ export default async function handler(req: Request) {
 
   let body;
   try {
-    body = await req.json();
+    // Wrap the JSON parsing in a timeout
+    body = await Promise.race([
+      req.json(),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timed out")), 10000) // 10 seconds
+      )
+    ]);
     console.log("Parsed body:", body); // Log the parsed body
+
     if (!body || Object.keys(body).length === 0) {
       return new Response(
         JSON.stringify({ error: "No valid data received" }),
@@ -18,8 +25,8 @@ export default async function handler(req: Request) {
     }
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: "Invalid JSON input" }),
-      { status: 400, headers: { "content-type": "application/json" } }
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: { "content-type": "application/json" } }
     );
   }
 
