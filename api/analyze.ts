@@ -13,3 +13,5 @@ export default async function handler(req: Request) {
     { status: 200, headers: { "content-type": "application/json" } }
   );
 }
+
+console.log(body);
