@@ -23,38 +23,51 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact Skeleton Key schema to ensure all React UI bindings are hit:
+            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact overarching schema.
+
+CRITICAL RULE: For the option names, you MUST use the EXACT, full, verbatim string the user provided in their options array. Do not summarize or shorten it. If the user wrote "Buy a dog. Needs exercise", you must write exactly "Buy a dog. Needs exercise".
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
-  "keyConstraints": "A single, synthesized paragraph of text summarizing their financial runway, timeline pressure, reversibility, and capability readiness. MUST be a string.",
-  "regretRisk": "Analysis of their biggest fear if they make the wrong choice.",
+  "keyConstraints": "A single, synthesized paragraph of text summarizing their constraints.",
+  "regretRisk": "Analysis of their biggest fear.",
+  "balancedRecommendation": {
+    "suggestedDirection": "Exact name of the best option",
+    "suggested_direction": "Exact name of the best option",
+    "confidence": 85,
+    "confidencePercent": 85,
+    "confidence_percent": 85,
+    "preparationStep": "A practical next action step.",
+    "preparation_step": "A practical next action step."
+  },
+  "suggestedDirection": "Exact name of the best option",
+  "confidence": 85,
+  "preparationStep": "A practical next action step.",
   "optionComparison": [
     {
-      "option": "Name of the option",
-      "name": "Name of the option",
-      "title": "Name of the option",
-      "label": "Name of the option",
+      "option": "EXACT FULL STRING of the option",
+      "name": "EXACT FULL STRING of the option",
+      "title": "EXACT FULL STRING of the option",
+      "label": "EXACT FULL STRING of the option",
+      "text": "EXACT FULL STRING of the option",
+      "value": "EXACT FULL STRING of the option",
       "bestPercent": 40,
       "likelyPercent": 40,
       "worstPercent": 20
     }
   ],
-  "balancedRecommendation": {
-    "suggestedDirection": "State the exact name of the single best option.",
-    "confidence": 85,
-    "preparationStep": "A practical next action step."
-  },
-  "recommendation": {
-    "suggestion": "State the exact name of the single best option.",
-    "considerations": ["A practical next action step."]
-  },
-  "suggestedDirection": "State the exact name of the single best option.",
-  "confidence": 85,
-  "preparationStep": "A practical next action step.",
-  "report_text": "Duplicate the regretRisk text here for backend saving.",
-  "recommendation_direction": "Duplicate the suggestedDirection here.",
-  "confidence_percent": 85
+  "percentages": [
+    {
+      "option": "EXACT FULL STRING of the option",
+      "text": "EXACT FULL STRING of the option",
+      "bestPercent": 40,
+      "likelyPercent": 40,
+      "worstPercent": 20
+    }
+  ],
+  "recommendation_direction": "Exact name of the best option",
+  "confidence_percent": 85,
+  "report_text": "Combine regret risk and preparation step here."
 }
 
 Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
