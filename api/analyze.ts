@@ -23,9 +23,9 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact overarching schema.
+            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact schema to ensure all React UI bindings are hit.
 
-CRITICAL RULE: For the option names, you MUST use the EXACT, full, verbatim string the user provided in their options array. Do not summarize or shorten it. If the user wrote "Buy a dog. Needs exercise", you must write exactly "Buy a dog. Needs exercise".
+CRITICAL RULE: For ALL option titles, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
@@ -33,33 +33,22 @@ CRITICAL RULE: For the option names, you MUST use the EXACT, full, verbatim stri
   "regretRisk": "Analysis of their biggest fear.",
   "balancedRecommendation": {
     "suggestedDirection": "Exact name of the best option",
-    "suggested_direction": "Exact name of the best option",
+    "recommendationDirection": "Exact name of the best option",
+    "direction": "Exact name of the best option",
+    "suggestion": "Exact name of the best option",
     "confidence": 85,
     "confidencePercent": 85,
-    "confidence_percent": 85,
-    "preparationStep": "A practical next action step.",
-    "preparation_step": "A practical next action step."
+    "confidenceScore": 85,
+    "preparationStep": "A practical next action step."
   },
-  "suggestedDirection": "Exact name of the best option",
-  "confidence": 85,
-  "preparationStep": "A practical next action step.",
   "optionComparison": [
     {
-      "option": "EXACT FULL STRING of the option",
-      "name": "EXACT FULL STRING of the option",
-      "title": "EXACT FULL STRING of the option",
-      "label": "EXACT FULL STRING of the option",
-      "text": "EXACT FULL STRING of the option",
-      "value": "EXACT FULL STRING of the option",
-      "bestPercent": 40,
-      "likelyPercent": 40,
-      "worstPercent": 20
-    }
-  ],
-  "percentages": [
-    {
-      "option": "EXACT FULL STRING of the option",
-      "text": "EXACT FULL STRING of the option",
+      "option": "Exact FULL string of the option",
+      "optionText": "Exact FULL string of the option",
+      "optionName": "Exact FULL string of the option",
+      "title": "Exact FULL string of the option",
+      "name": "Exact FULL string of the option",
+      "label": "Exact FULL string of the option",
       "bestPercent": 40,
       "likelyPercent": 40,
       "worstPercent": 20
