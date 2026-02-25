@@ -23,43 +23,41 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact schema to ensure all React UI bindings are hit.
+            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact dual-layer schema to map perfectly to the React UI and the SQLite Database simultaneously.
 
-CRITICAL RULE: For ALL option titles, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
+CRITICAL RULE: For ALL "option" fields, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
   "keyConstraints": "A single, synthesized paragraph of text summarizing their constraints.",
   "regretRisk": "Analysis of their biggest fear.",
-  "balancedRecommendation": {
-    "suggestedDirection": "Exact name of the best option",
-    "recommendationDirection": "Exact name of the best option",
-    "direction": "Exact name of the best option",
-    "suggestion": "Exact name of the best option",
-    "confidence": 85,
-    "confidencePercent": 85,
-    "confidenceScore": 85,
-    "preparationStep": "A practical next action step."
-  },
   "optionComparison": [
     {
       "option": "Exact FULL string of the option",
-      "optionText": "Exact FULL string of the option",
-      "optionName": "Exact FULL string of the option",
-      "title": "Exact FULL string of the option",
-      "name": "Exact FULL string of the option",
-      "label": "Exact FULL string of the option",
       "bestPercent": 40,
       "likelyPercent": 40,
       "worstPercent": 20
     }
   ],
-  "recommendation_direction": "Exact name of the best option",
+  "percentages": [
+    {
+      "option": "Exact FULL string of the option",
+      "bestPercent": 40,
+      "likelyPercent": 40,
+      "worstPercent": 20
+    }
+  ],
+  "balancedRecommendation": {
+     "suggestedDirection": "Exact FULL string of the single best option",
+     "confidence": 85,
+     "preparationStep": "A practical next action step."
+  },
+  "recommendation_direction": "Exact FULL string of the single best option",
   "confidence_percent": 85,
-  "report_text": "Combine regret risk and preparation step here."
+  "report_text": "Combine regret risk and preparation step here for the database fallback."
 }
 
-Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
+Ensure there is an object in the optionComparison and percentages arrays for every option the user provided. The percentages for each option must equal exactly 100.`
           },
           {
             role: "user",
