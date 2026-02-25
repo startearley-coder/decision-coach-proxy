@@ -25,9 +25,7 @@ export default async function handler(req, res) {
             role: "system",
             content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. 
 
-CRITICAL RULE: For ALL option titles and recommended directions, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
-
-You MUST use this exact Maximum Coverage Schema to guarantee we hit the hidden frontend variables:
+CRITICAL RULE: You MUST use this exact schema to map perfectly to the React UI interfaces. Do NOT nest the recommendation fields. Keep them at the root level.
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
@@ -35,49 +33,19 @@ You MUST use this exact Maximum Coverage Schema to guarantee we hit the hidden f
   "regretRisk": "Analysis of their biggest fear.",
   "optionComparison": [
     {
-      "option": "Exact FULL string of the option",
+      "optionText": "Exact FULL string of the option exactly as the user typed it.",
       "bestPercent": 40,
       "likelyPercent": 40,
-      "worstPercent": 20
+      "worstPercent": 20,
+      "rationale": "A brief, 1-sentence reason for these percentages."
     }
   ],
-  "percentages": [
-    {
-      "option": "Exact FULL string of the option",
-      "bestPercent": 40,
-      "likelyPercent": 40,
-      "worstPercent": 20
-    }
-  ],
-  "balancedRecommendation": {
-     "suggestedDirection": "Exact FULL string of the single best option",
-     "suggested_direction": "Exact FULL string of the single best option",
-     "recommendationDirection": "Exact FULL string of the single best option",
-     "recommendation_direction": "Exact FULL string of the single best option",
-     "recommendedOption": "Exact FULL string of the single best option",
-     "direction": "Exact FULL string of the single best option",
-     "suggestion": "Exact FULL string of the single best option",
-     "confidence": 85,
-     "confidencePercent": 85,
-     "confidence_percent": 85,
-     "preparationStep": "A practical next action step.",
-     "preparation_step": "A practical next action step."
-  },
-  "balanced_recommendation": {
-     "suggestedDirection": "Exact FULL string of the single best option",
-     "confidence": 85,
-     "preparationStep": "A practical next action step."
-  },
-  "recommendation_direction": "Exact FULL string of the single best option",
-  "confidence_percent": 85,
-  "suggestedDirection": "Exact FULL string of the single best option",
-  "confidence": 85,
-  "preparationStep": "A practical next action step.",
-  "preparation_step": "A practical next action step.",
-  "report_text": "Combine regret risk and preparation step here for the database fallback."
+  "recommendationDirection": "Exact FULL string of the single best option.",
+  "confidencePercent": 85,
+  "preparationStep": "A practical next action step."
 }
 
-Ensure there is an object in the optionComparison and percentages arrays for every option the user provided. The percentages for each option must equal exactly 100.`
+Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
           },
           {
             role: "user",
