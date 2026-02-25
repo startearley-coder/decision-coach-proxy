@@ -23,9 +23,11 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact dual-layer schema to map perfectly to the React UI and the SQLite Database simultaneously.
+            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. 
 
-CRITICAL RULE: For ALL "option" fields, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
+CRITICAL RULE: For ALL option titles and recommended directions, you MUST use the EXACT, full, verbatim string the user provided. Do not summarize or shorten it.
+
+You MUST use this exact Maximum Coverage Schema to guarantee we hit the hidden frontend variables:
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
@@ -49,11 +51,29 @@ CRITICAL RULE: For ALL "option" fields, you MUST use the EXACT, full, verbatim s
   ],
   "balancedRecommendation": {
      "suggestedDirection": "Exact FULL string of the single best option",
+     "suggested_direction": "Exact FULL string of the single best option",
+     "recommendationDirection": "Exact FULL string of the single best option",
+     "recommendation_direction": "Exact FULL string of the single best option",
+     "recommendedOption": "Exact FULL string of the single best option",
+     "direction": "Exact FULL string of the single best option",
+     "suggestion": "Exact FULL string of the single best option",
+     "confidence": 85,
+     "confidencePercent": 85,
+     "confidence_percent": 85,
+     "preparationStep": "A practical next action step.",
+     "preparation_step": "A practical next action step."
+  },
+  "balanced_recommendation": {
+     "suggestedDirection": "Exact FULL string of the single best option",
      "confidence": 85,
      "preparationStep": "A practical next action step."
   },
   "recommendation_direction": "Exact FULL string of the single best option",
   "confidence_percent": 85,
+  "suggestedDirection": "Exact FULL string of the single best option",
+  "confidence": 85,
+  "preparationStep": "A practical next action step.",
+  "preparation_step": "A practical next action step.",
   "report_text": "Combine regret risk and preparation step here for the database fallback."
 }
 
