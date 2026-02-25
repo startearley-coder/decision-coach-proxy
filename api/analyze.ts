@@ -23,16 +23,11 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs and return a strict JSON object. You MUST exactly match this schema to bind to the React frontend:
+            content: `You are an expert decision coach. Analyze the user's decision inputs and return a strict JSON object. You MUST exactly match this schema to prevent the React frontend from crashing:
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
-  "keyConstraints": {
-    "financialRunway": "Analysis of the financial impact.",
-    "timelinePressure": "Analysis of the urgency.",
-    "reversibility": "Analysis of how reversible the decision is.",
-    "capabilityReadiness": "Analysis of their uncertainty level."
-  },
+  "keyConstraints": "A single, synthesized paragraph of text summarizing their financial runway, timeline pressure, reversibility, and capability readiness. This MUST be a string, do NOT use nested objects.",
   "optionComparison": [
     {
       "option": "Name of the option",
