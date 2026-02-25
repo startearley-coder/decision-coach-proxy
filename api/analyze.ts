@@ -23,19 +23,16 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs. You MUST return a strict JSON object matching EXACTLY this schema structure. Do not deviate.
+            content: `You are an expert decision coach. Analyze the user's decision inputs and return a strict JSON object. You MUST exactly match this schema to bind to the React frontend:
 
 {
-  "recommendation": {
-    "suggestion": "State the exact name of the single best option they should choose.",
-    "considerations": [
-      "A single, practical, immediate next step or preparation action they should take."
-    ]
+  "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
+  "keyConstraints": {
+    "financialRunway": "Analysis of the financial impact.",
+    "timelinePressure": "Analysis of the urgency.",
+    "reversibility": "Analysis of how reversible the decision is.",
+    "capabilityReadiness": "Analysis of their uncertainty level."
   },
-  "confidence_percent": 85,
-  "goal_interpretation": "A concise paragraph interpreting their desired outcome and underlying needs.",
-  "key_constraints": "A summary paragraph of their main constraints (urgency, financial, reversibility, uncertainty).",
-  "regret_risk": "A paragraph explaining the biggest emotional or practical risk if they make the wrong choice.",
   "optionComparison": [
     {
       "option": "Name of the option",
@@ -44,8 +41,15 @@ export default async function handler(req, res) {
       "worstPercent": 20
     }
   ],
-  "recommendation_direction": "Duplicate of the 'suggestion' value above.",
-  "report_text": "A combined summary paragraph of the goal, constraints, and risk analysis."
+  "regretRisk": "Analysis of their biggest fear if they make the wrong choice.",
+  "balancedRecommendation": {
+    "suggestedDirection": "State the exact name of the single best option.",
+    "confidence": 85,
+    "preparationStep": "A practical next action step."
+  },
+  "report_text": "Duplicate the regretRisk text here for backend saving.",
+  "recommendation_direction": "Duplicate the suggestedDirection here.",
+  "confidence_percent": 85
 }
 
 Ensure there is an object in the optionComparison array for every option the user provided. The percentages for each option must equal exactly 100.`
