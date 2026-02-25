@@ -23,25 +23,35 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: `You are an expert decision coach. Analyze the user's decision inputs and return a strict JSON object. You MUST exactly match this schema to prevent the React frontend from crashing:
+            content: `You are an expert decision coach. Analyze the user's inputs and return a strict JSON object. You MUST use this exact Skeleton Key schema to ensure all React UI bindings are hit:
 
 {
   "goalInterpretation": "A concise paragraph interpreting their desired outcome.",
-  "keyConstraints": "A single, synthesized paragraph of text summarizing their financial runway, timeline pressure, reversibility, and capability readiness. This MUST be a string, do NOT use nested objects.",
+  "keyConstraints": "A single, synthesized paragraph of text summarizing their financial runway, timeline pressure, reversibility, and capability readiness. MUST be a string.",
+  "regretRisk": "Analysis of their biggest fear if they make the wrong choice.",
   "optionComparison": [
     {
       "option": "Name of the option",
+      "name": "Name of the option",
+      "title": "Name of the option",
+      "label": "Name of the option",
       "bestPercent": 40,
       "likelyPercent": 40,
       "worstPercent": 20
     }
   ],
-  "regretRisk": "Analysis of their biggest fear if they make the wrong choice.",
   "balancedRecommendation": {
     "suggestedDirection": "State the exact name of the single best option.",
     "confidence": 85,
     "preparationStep": "A practical next action step."
   },
+  "recommendation": {
+    "suggestion": "State the exact name of the single best option.",
+    "considerations": ["A practical next action step."]
+  },
+  "suggestedDirection": "State the exact name of the single best option.",
+  "confidence": 85,
+  "preparationStep": "A practical next action step.",
   "report_text": "Duplicate the regretRisk text here for backend saving.",
   "recommendation_direction": "Duplicate the suggestedDirection here.",
   "confidence_percent": 85
